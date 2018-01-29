@@ -1,0 +1,22 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    ingress.kubernetes.io/secure-backends: "true"
+    ingress.kubernetes.io/whitelist-source-range: "{{.WHITELIST}}"
+  name: pttg-eue-eligibility-spike
+spec:
+  rules:
+  - host: eligibility.rps.{{.DNS_PREFIX}}pttg.homeoffice.gov.uk
+    http:
+      paths:
+      - backend:
+          serviceName: pttg-eue-eligibility-spike
+          servicePort: 443
+        path: /
+  tls:
+  - hosts:
+    - eligibility.rps.{{.DNS_PREFIX}}pttg.homeoffice.gov.uk
+    secretName: letsencrypt-tls-pttg-eue-eligibility-spike
